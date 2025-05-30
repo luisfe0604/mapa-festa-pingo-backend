@@ -106,8 +106,8 @@ app.put('/api/mesas/limpar/:id', async (req, res) => {
     const id = parseInt(req.params.id, 10) + 1;
     const { nome, cadeiras, ocupada } = req.body;
 
-    if (!nome || !cadeiras) {
-      return res.status(400).json({ error: 'Nome e número de cadeiras são obrigatórios.' });
+    if (typeof ocupada !== 'boolean') {
+      return res.status(400).json({ error: 'Valor de "ocupada" inválido.' });
     }
 
     const result = await db.query(
