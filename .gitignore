@@ -1,0 +1,22 @@
+# Dependências
+node_modules/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Diretórios de build
+dist/
+build/
+
+# Arquivos de sistema
+.DS_Store
+Thumbs.db
+
+# Configurações de editor
+.vscode/
+.idea/
+
+# Variáveis de ambiente
+.env
