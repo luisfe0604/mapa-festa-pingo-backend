@@ -101,6 +101,32 @@ app.put('/api/mesas/:id', async (req, res) => {
   }
 });
 
+app.put('/api/mesas/limpar/:id', async (req, res) => {
+  try {
+    const id = parseInt(req.params.id, 10) + 1;
+    const { nome, cadeiras, ocupada } = req.body;
+
+    if (!nome || !cadeiras) {
+      return res.status(400).json({ error: 'Nome e número de cadeiras são obrigatórios.' });
+    }
+
+    const result = await db.query(
+      'UPDATE mesas SET nome = $1, cadeiras = $2, ocupada = $3 WHERE id = $4 RETURNING *',
+      [nome, cadeiras, ocupada, id]
+    );
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ error: 'Mesa não encontrada.' });
+    }
+
+    res.status(200).json({ message: 'Mesa atualizada com sucesso.', mesa: result.rows[0] });
+    broadcastMesasAtualizadas(); 
+  } catch (error) {
+    console.error('Erro ao atualizar mesa:', error);
+    res.status(500).json({ error: 'Erro interno no servidor.' });
+  }
+});
+
 server.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
 });
